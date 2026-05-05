@@ -1,22 +1,30 @@
 "use client"
 import Link from "next/link";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, SubmitHandler } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { User } from "@/app/schemas/login.schema";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Eye, EyeOff } from "lucide-react";
 
+type Inputs = {
+    email: string;
+    password: string;
+}
+
 export default function LoginForm() {
     const [passwordVisibility, setPasswordVisibility] = useState<boolean>(false);
-    //const { register, handleSubmit } = useForm();
+    const { register, handleSubmit, watch, formState: { errors } } = useForm<Inputs>({ resolver: zodResolver(User) });
 
-    const changePasswordVisibility = () => {
-        setPasswordVisibility(!passwordVisibility);
-    }
+    const changePasswordVisibility = () => setPasswordVisibility(!passwordVisibility);
+
+    const onSubmit: SubmitHandler<Inputs> = (data) => console.log("Dados enviados:", data);
+    console.log(watch());
 
     return (
         <form 
             className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl p-8 w-1/4"
-            action=""
+            onSubmit={handleSubmit(onSubmit)}
         >
             <div className="flex flex-col gap-5 w-full">
                 <div>
@@ -42,7 +50,9 @@ export default function LoginForm() {
                             type="email" 
                             id="email" 
                             placeholder="seu@email.com"
+                            {...register("email")}
                         />
+                        {errors.email?.message && <span className="text-red-500 text-sm font-inter">{errors.email?.message}</span>}
                     </div>
                     <div className="flex flex-col gap-1.5 w-full">
                         <label className="text-slate-400 text-sm font-poppins font-semibold" htmlFor="password">Senha</label>
@@ -52,10 +62,11 @@ export default function LoginForm() {
                                 type={passwordVisibility ? "text" : "password"} 
                                 id="password" 
                                 placeholder="******"
+                                {...register("password")}
                             />
                             { passwordVisibility ? <EyeOff className="absolute right-5 text-white cursor-pointer" size={20} onClick={changePasswordVisibility} /> : <Eye className="absolute right-5 text-white cursor-pointer" size={20} onClick={changePasswordVisibility} /> }
                         </div>
-                        
+                            {errors.password?.message && <span className="text-red-500 text-sm font-inter">{errors.password?.message}</span>}
                     </div>
                     <div className="flex justify-between items-center">
                         <div className="space-x-2.5">
@@ -65,10 +76,10 @@ export default function LoginForm() {
                         <Link className="text-blue-400 text-sm hover:text-blue-300 transition-colors" href={""}>Esqueci a senha</Link>
                     </div>
                     <div className="flex w-full">
-                        <Link 
+                        <button
                             className="text-white text-base font-poppins font-semibold text-center bg-linear-to-r from-blue-500 to-cyan-500 rounded-xl shadow-lg shadow-blue-500/30 p-3 w-full transition-all delay-100 hover:scale-105 hover:shadow-blue-500/50" 
-                            href={""}
-                        >Entrar</Link>
+                            type="submit"                            
+                        >Entrar</button>
                     </div>
                     <div className="flex justify-center items-center gap-1 w-full">
                         <span className="text-slate-400 text-sm font-inter">Não tem conta?</span>
