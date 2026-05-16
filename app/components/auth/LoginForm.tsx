@@ -5,7 +5,9 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { User } from "@/app/schemas/login.schema";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Separator } from "@/components/ui/separator";
 import { Eye, EyeOff } from "lucide-react";
+import { FaGoogle } from "react-icons/fa";
 
 type Inputs = {
     email: string;
@@ -75,11 +77,20 @@ export default function LoginForm() {
                         </div>
                         <Link className="text-blue-400 text-sm hover:text-blue-300 transition-colors" href={""}>Esqueci a senha</Link>
                     </div>
-                    <div className="flex w-full">
+                    <div className="flex flex-col gap-2 w-full">
                         <button
-                            className="text-white text-base font-poppins font-semibold text-center bg-linear-to-r from-blue-500 to-cyan-500 rounded-xl shadow-lg shadow-blue-500/30 p-3 w-full transition-all delay-100 hover:scale-105 hover:shadow-blue-500/50" 
+                            className="text-white text-base font-poppins font-semibold text-center bg-linear-to-r from-blue-500 to-cyan-500 rounded-xl shadow-lg shadow-blue-500/30 p-3 w-full transition-all delay-100 cursor-pointer hover:scale-105 hover:shadow-blue-500/50" 
                             type="submit"                            
                         >Entrar</button>
+                        <div className="flex justify-center items-center gap-2 w-full">
+                            <Separator className="bg-slate-400 flex-1" orientation="horizontal" />
+                            <span className="text-white text-sm font-inter font-semibold">Ou</span>
+                            <Separator className="bg-slate-400 flex-1" orientation="horizontal" />
+                        </div>
+                        <button
+                            className="flex justify-center items-center gap-2 text-white text-base font-poppins font-semibold text-center bg-linear-to-r from-blue-500 to-cyan-500 rounded-xl shadow-lg shadow-blue-500/30 p-3 w-full transition-all delay-100 cursor-pointer hover:scale-105 hover:shadow-blue-500/50"
+                            type="button"
+                        ><FaGoogle /> Entrar com Google</button>
                     </div>
                     <div className="flex justify-center items-center gap-1 w-full">
                         <span className="text-slate-400 text-sm font-inter">Não tem conta?</span>
