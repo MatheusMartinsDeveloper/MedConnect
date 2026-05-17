@@ -8,11 +8,11 @@ export default function Home() {
         <div className="flex items-center gap-2">
           <div className="flex items-center w-10 h-10 bg-linear-to-br from-blue-400 to-cyan-400 rounded-xl">
             <Image
+              className="brightness-0 invert"
               src={"/assets/medconnect_logo.png"}
               alt="MedConnect Logo"
               width={250}
               height={250}
-              className="brightness-0 invert"
             />
           </div>
           <h1 className="text-white text-2xl font-poppins font-semibold">MedConnect</h1>
