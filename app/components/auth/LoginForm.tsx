@@ -1,6 +1,7 @@
-"use client"
-import Link from "next/link";
+"use client";
+import z from "zod";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { User } from "@/app/schemas/login.schema";
@@ -8,19 +9,42 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import { Eye, EyeOff } from "lucide-react";
 import { FaGoogle } from "react-icons/fa";
+import Link from "next/link";
 
-type Inputs = {
-    email: string;
-    password: string;
-}
+type Inputs = z.infer<typeof User>;
+type Role = "PATIENT" | "DOCTOR";
 
 export default function LoginForm() {
+    const [role, setRole] = useState<Role>("PATIENT");
     const [passwordVisibility, setPasswordVisibility] = useState<boolean>(false);
     const { register, handleSubmit, watch, formState: { errors } } = useForm<Inputs>({ resolver: zodResolver(User) });
+    const router = useRouter();
 
     const changePasswordVisibility = () => setPasswordVisibility(!passwordVisibility);
 
-    const onSubmit: SubmitHandler<Inputs> = (data) => console.log("Dados enviados:", data);
+    const onSubmit: SubmitHandler<Inputs> = async (data) => {
+        const requestData = {
+            ...data,
+            role
+        };
+
+        console.log(requestData);
+
+        const response = await fetch("http://localhost:8080/user/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(requestData)
+        });
+
+        console.log(response);
+        console.log(role);
+
+        if(response.status == 200 && role == "PATIENT") {
+            router.push("user/patient");
+        }
+    }
     console.log(watch());
 
     return (
@@ -32,15 +56,19 @@ export default function LoginForm() {
                 <div>
                     <h2 className="text-white text-xl font-poppins font-semibold">Entrar na plataforma</h2>
                 </div>
-                <Tabs className="bg-white/5 rounded-xl p-1 w-full" defaultValue="patient">
+                <Tabs 
+                    className="bg-white/5 rounded-xl p-1 w-full" 
+                    value={role}
+                    onValueChange={(value) => setRole(value as Role)}
+                >
                     <TabsList className="gap-2 w-full">
                         <TabsTrigger 
                             className="data-active:text-white data-active:bg-blue-500 text-slate-400 rounded-xl p-4 w-full transition-all delay-100 cursor-pointer hover:text-white" 
-                            value="patient"
+                            value="PATIENT"
                         >Paciente</TabsTrigger>
                         <TabsTrigger 
                             className="data-active:text-white data-active:bg-blue-500 text-slate-400 rounded-xl p-4 w-full transition-all delay-100 cursor-pointer hover:text-white" 
-                            value="doctor"
+                            value="DOCTOR"
                         >Médico</TabsTrigger>
                     </TabsList>
                 </Tabs>
