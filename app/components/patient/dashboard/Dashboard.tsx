@@ -1,6 +1,7 @@
 import TitleSection from "./TitleSection";
 import CardsSection from "./CardsSection";
 import ConsultsPatientSection from "./ConsultsPatientSection";
+import RecomendDoctorsSection from "./RecomendDoctorsSection";
 
 export default function Dashboard() {
     return (
@@ -8,6 +9,7 @@ export default function Dashboard() {
             <TitleSection />
             <CardsSection />
             <ConsultsPatientSection />
+            <RecomendDoctorsSection />
         </>
     );
 }
