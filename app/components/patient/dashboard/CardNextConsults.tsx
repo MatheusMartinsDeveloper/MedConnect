@@ -27,11 +27,13 @@ export default function CardNextConsults({ doctorProfilePicture, doctorName, doc
                         />
                     </div>
                     <div className="flex flex-col gap-2">
-                        <h3 className="text-white text-base font-poppins font-semibold">{doctorName}</h3>
-                        <span className="text-slate-400 text-sm font-inter">{doctorSpecialization}</span>
+                        <div>
+                            <h3 className="text-white text-base font-poppins font-semibold transition-all delay-75 group-hover:text-blue-400">{doctorName}</h3>
+                            <span className="text-slate-400 text-sm font-inter">{doctorSpecialization}</span>
+                        </div>
                         <div className="flex items-center gap-4">
-                            <span className="flex items-center gap-1 text-white text-sm font-inter font-medium"><Calendar size={20} /> {date}</span>
-                            <span className="flex items-center gap-1 text-white text-sm font-inter font-medium"><Clock size={20} /> {hour}</span>
+                            <span className="flex items-center gap-1 text-white text-sm font-inter font-medium"><Calendar size={15} /> {date}</span>
+                            <span className="flex items-center gap-1 text-white text-sm font-inter font-medium"><Clock size={15} /> {hour}</span>
                         </div>
                     </div>
                 </div>
