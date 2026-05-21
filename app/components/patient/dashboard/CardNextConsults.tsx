@@ -12,7 +12,10 @@ type CardNextConsultsType = {
 
 export default function CardNextConsults({ doctorProfilePicture, doctorName, doctorSpecialization, date, hour }: CardNextConsultsType) {
     return (
-        <Link className="bg-white/5 border border-white/10 rounded-2xl transition-all delay-100 group hover:border-blue-400" href={""}>
+        <Link 
+            className="bg-white/5 border border-white/10 rounded-2xl transition-all delay-100 group hover:border-blue-400" 
+            href={""}
+        >
             <div className="flex justify-between items-center w-full p-5">
                 <div className="flex items-center gap-4">
                     <div className="relative w-14 h-14">
@@ -33,10 +36,9 @@ export default function CardNextConsults({ doctorProfilePicture, doctorName, doc
                     </div>
                 </div>
                 <div>
-                    <Link 
-                        className="text-blue-400 text-base font-poppins " 
-                        href={""}
-                    ><ArrowRight className="transition-all delay-100 rounded-full p-2 group-hover:bg-blue-400 group-hover:text-white" size={35} /></Link>
+                    <span 
+                        className="text-blue-400 text-base font-poppins" 
+                    ><ArrowRight className="transition-all delay-100 rounded-full p-2 group-hover:bg-blue-400 group-hover:text-white" size={35} /></span>
                 </div>
             </div>
         </Link>
