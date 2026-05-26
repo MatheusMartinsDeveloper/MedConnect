@@ -1,6 +1,11 @@
+import TitleSection from "./TitleSection";
+import StatsSection from "./StatsSection";
 
 export default function Report() {
     return (
-        <h1>Prontuario</h1>
+        <>
+            <TitleSection />
+            <StatsSection />
+        </>
     );
 }
