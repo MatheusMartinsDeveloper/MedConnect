@@ -1,6 +1,13 @@
+import TitleSection from "./TitleSection";
+import NextConsultsSection from "./NextConsultsSection";
+import ConsultHistotySection from "./ConsutHistorySection";
 
 export default function Appointments() {
     return (
-        <h1>Consultas</h1>
+        <>
+            <TitleSection />
+            <NextConsultsSection />
+            <ConsultHistotySection />
+        </>
     );
 }
