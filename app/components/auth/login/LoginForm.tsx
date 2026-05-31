@@ -91,7 +91,7 @@ export default function LoginForm() {
                                 className="w-full text-white bg-white/5 border border-white/10 rounded-xl p-2.5 outline-0 focus:ring-2 focus:ring-blue-500 placeholder:text-slate-400"
                                 type={passwordVisibility ? "text" : "password"} 
                                 id="password" 
-                                placeholder="******"
+                                placeholder="********"
                                 {...register("password")}
                             />
                             { passwordVisibility ? <EyeOff className="absolute right-5 text-white cursor-pointer" size={20} onClick={changePasswordVisibility} /> : <Eye className="absolute right-5 text-white cursor-pointer" size={20} onClick={changePasswordVisibility} /> }
@@ -122,7 +122,7 @@ export default function LoginForm() {
                     </div>
                     <div className="flex justify-center items-center gap-1 w-full">
                         <span className="text-slate-400 text-sm font-inter">Não tem conta?</span>
-                        <Link className="text-blue-400 text-sm font-inter hover:text-blue-300" href={""}>Cadrastre-se grátis</Link>
+                        <Link className="text-blue-400 text-sm font-inter transition-all delay-75 hover:text-blue-300" href={"/register"}>Cadrastre-se grátis</Link>
                     </div>
                 </div>
             </div>
