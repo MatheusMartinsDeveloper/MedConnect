@@ -1,46 +1,90 @@
 "use client";
-import { Input } from "@/components/ui/input";
 import { ArrowLeft, User } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Calendar } from "@/components/ui/calendar";
-import { ptBR } from "date-fns/locale";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { useForm, Controller, SubmitHandler } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { RegisterPatientSchema } from "@/app/schemas/register-patient.schema";
+import z from "zod";
+import { useRegisterStore } from "@/app/store/register-store";
+import { PatternFormat } from "react-number-format";
+
+type Inputs = z.infer<typeof RegisterPatientSchema>
 
 export default function FormPatient() {
     const [preview, setPreview] = useState<string | null>(null);
-    const [date, setDate] = useState<Date | undefined>(new Date());
-    const [timezone, setTimezone] = useState<string | undefined>(undefined);
+    const [profilePicture, setProfilePicture] = useState<File | null>(null);
     const router = useRouter();
+    const { handleSubmit, watch, control, formState: { errors } } = useForm({ resolver: zodResolver(RegisterPatientSchema) });
 
-    useEffect(() => {
-        setTimezone(Intl.DateTimeFormat().resolvedOptions().timeZone)
-    }, [])
-    
-    const handleImage = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const file = event.target.files?.[0];
+    const onSubmit: SubmitHandler<Inputs> = async (data) => {
+        try {
+            const storeData = useRegisterStore.getState();
 
-        if (!file) return;
+            const requestData = {
+                ...storeData,
+                ...data,
+                profilePicture
+            };
 
-        const imageUrl = URL.createObjectURL(file);
+            const formData = new FormData();
 
-        setPreview(imageUrl);
+            Object.entries(requestData).forEach(([key, value]) => {
+                if (value !== null && value !== undefined) {
+                    formData.append(key, value as string | Blob);
+                }
+            });
+
+            for (const [key, value] of formData.entries()) {
+                console.log(key, value);
+            }
+
+            const response = await fetch("http://localhost:8080/user/register", {
+                method: "POST",
+                body: formData
+            });
+
+            console.log("Response:", response);
+            console.log(response.status);
+            console.log(await response.text);
+        } catch (error) {
+            console.error("Erro:", error);
+        }
     }
+
+    console.log(watch());
     
     return (
-        <div className="flex flex-col gap-5 w-full bg-white/5 border border-white/10 rounded-2xl p-4">
+        <form 
+            className="flex flex-col gap-5 w-full bg-white/5 border border-white/10 rounded-2xl p-4"
+            onSubmit={handleSubmit(onSubmit)}
+        >
             <div className="space-y-5 w-full">
                 <div className="flex flex-col justify-center items-center gap-1.5 w-full">
                     <label className="text-slate-400 text-sm font-poppins font-semibold" htmlFor="profilePicture">Foto de Perfil</label>
-                    <Input 
-                        className="absolute w-16 h-16 opacity-0 cursor-pointer z-10"
-                        onChange={handleImage}
-                        type="file" 
-                        name="profilePicture" 
-                        id="profilePicture" 
+                    <Controller
+                        name="profilePicture"
+                        control={control}
+                        render={({ field }) => (
+                            <input 
+                                className="absolute w-16 h-16 opacity-0 cursor-pointer z-10"
+                                type="file"
+                                accept="image/*"
+                                onChange={(e) => {
+                                    const file = e.target.files?.[0];
+
+                                    if(!file) return;
+
+                                    field.onChange(file);
+
+                                    setPreview(URL.createObjectURL(file))
+                                    setProfilePicture(file);
+                                }}
+                            />
+                        )}
                     />
                     { !preview && (
                         <div className="w-16 h-16 flex justify-center items-center bg-white/5 border border-white/10 rounded-full">
@@ -57,59 +101,77 @@ export default function FormPatient() {
                             />
                         </div>
                     )}
+                    {errors.profilePicture?.message && <span className="text-red-500 text-sm font-inter">{errors.profilePicture?.message}</span>}
                 </div>
                 <div className="flex justify-between items-center gap-2 w-full">
                     <div className="flex flex-col w-full">
                         <label className="text-slate-400 text-sm font-poppins font-semibold" htmlFor="gender">Gêreno</label>
-                        <Select>
-                            <SelectTrigger className="w-full text-white bg-white/5 border border-white/10 rounded-xl p-2.5 outline-0 focus:ring-2 focus:ring-blue-500 placeholder:text-slate-400">
-                                <SelectValue placeholder="Selecione seu gênero" />
-                            </SelectTrigger>
-                            <SelectContent className="border border-white/10" align="center">
-                                <SelectGroup>
-                                    <SelectItem value="male">Masculino</SelectItem>
-                                    <SelectItem value="female">Feminino</SelectItem>
-                                </SelectGroup>
-                            </SelectContent>
-                        </Select>
+                        <Controller
+                            name="gender"
+                            control={control}
+                            render={({ field }) => (
+                                <Select
+                                    onValueChange={field.onChange}
+                                    defaultValue={field.value}
+                                >
+                                    <SelectTrigger className="w-full text-white bg-white/5 border border-white/10 rounded-xl p-2.5 outline-0 focus:ring-2 focus:ring-blue-500 placeholder:text-slate-400">
+                                        <SelectValue placeholder="Selecione seu gênero" />
+                                    </SelectTrigger>
+                                    <SelectContent className="border border-white/10" align="center">
+                                        <SelectGroup>
+                                            <SelectItem value="Masculino">Masculino</SelectItem>
+                                            <SelectItem value="Feminino">Feminino</SelectItem>
+                                        </SelectGroup>
+                                    </SelectContent>
+                                </Select>
+                            )}
+                        />
+                        {errors.gender?.message && <span className="text-red-500 text-sm font-inter">{errors.gender?.message}</span>}
                     </div>
                     <div className="flex flex-col w-full">
                         <label className="text-slate-400 text-sm font-poppins font-semibold" htmlFor="dateBirth">Data de Nascimento</label>
-                        <Popover>
-                            <PopoverTrigger 
-                                className="w-full text-white bg-white/5 border border-white/10 rounded-xl p-2.5 outline-0 focus:ring-2 focus:ring-blue-500 placeholder:text-slate-400"
-                                asChild 
-                            >
-                                <span>DD/MM/AAAA</span>
-                            </PopoverTrigger>
-                            <PopoverContent 
-                                className="w-full bg-slate-900 border border-white/10 ring-0 cursor-pointer" 
-                                align="center"
-                            >
-                                <Calendar 
-                                    className="w-full text-white cursor-pointer"
-                                    mode="single"
-                                    locale={ptBR}
-                                    selected={date}
-                                    onSelect={setDate}
-                                    timeZone={timezone}
+                        <Controller
+                            name="dateBirth"
+                            control={control}
+                            render={({ field }) => (
+                                <PatternFormat
+                                    className="w-full text-white bg-white/5 border border-white/10 rounded-xl p-2.5 outline-0 focus:ring-2 focus:ring-blue-500 placeholder:text-slate-400"
+                                    format="##/##/####"
+                                    placeholder="DD/MM/AAAA"
+                                    value={field.value}
+                                    onValueChange={(values) =>
+                                        field.onChange(values.formattedValue)
+                                    }
                                 />
-                            </PopoverContent>
-                        </Popover>
+                            )}
+                        />
+                        {errors.dateBirth?.message && <span className="text-red-500 text-sm font-inter">{errors.dateBirth?.message}</span>}
                     </div>
                 </div>
                 <div className="flex flex-col gap-2 w-full">
                     <label className="text-slate-400 text-sm font-poppins font-semibold" htmlFor="bloodType">Tipo Sanguíneo</label>
-                    <ToggleGroup className="grid grid-cols-4 w-full" type="single">
-                        <ToggleGroupItem className="text-slate-400 text-sm font-poppins font-semibold bg-white/5 border border-white/10 rounded-xl cursor-pointer transition-all delay-75 hover:text-white hover:bg-blue-300" value="A+">A+</ToggleGroupItem>
-                        <ToggleGroupItem className="text-slate-400 text-sm font-poppins font-semibold bg-white/5 border border-white/10 rounded-xl cursor-pointer transition-all delay-75 hover:text-white hover:bg-blue-300" value="A-">A-</ToggleGroupItem>
-                        <ToggleGroupItem className="text-slate-400 text-sm font-poppins font-semibold bg-white/5 border border-white/10 rounded-xl cursor-pointer transition-all delay-75 hover:text-white hover:bg-blue-300" value="B+">B+</ToggleGroupItem>
-                        <ToggleGroupItem className="text-slate-400 text-sm font-poppins font-semibold bg-white/5 border border-white/10 rounded-xl cursor-pointer transition-all delay-75 hover:text-white hover:bg-blue-300" value="B-">B-</ToggleGroupItem>
-                        <ToggleGroupItem className="text-slate-400 text-sm font-poppins font-semibold bg-white/5 border border-white/10 rounded-xl cursor-pointer transition-all delay-75 hover:text-white hover:bg-blue-300" value="AB+">AB+</ToggleGroupItem>
-                        <ToggleGroupItem className="text-slate-400 text-sm font-poppins font-semibold bg-white/5 border border-white/10 rounded-xl cursor-pointer transition-all delay-75 hover:text-white hover:bg-blue-300" value="AB-">AB-</ToggleGroupItem>
-                        <ToggleGroupItem className="text-slate-400 text-sm font-poppins font-semibold bg-white/5 border border-white/10 rounded-xl cursor-pointer transition-all delay-75 hover:text-white hover:bg-blue-300" value="0+">O+</ToggleGroupItem>
-                        <ToggleGroupItem className="text-slate-400 text-sm font-poppins font-semibold bg-white/5 border border-white/10 rounded-xl cursor-pointer transition-all delay-75 hover:text-white hover:bg-blue-300" value="0-">O-</ToggleGroupItem>
-                    </ToggleGroup>
+                    <Controller 
+                        name="bloodType"
+                        control={control}
+                        render={({ field }) => (
+                            <ToggleGroup 
+                                className="grid grid-cols-4 w-full" 
+                                type="single"
+                                value={field.value}
+                                onValueChange={field.onChange}
+                            >
+                                <ToggleGroupItem className="text-slate-400 text-sm font-poppins font-semibold bg-white/5 border border-white/10 rounded-xl cursor-pointer transition-all delay-75 hover:text-white hover:bg-blue-300" value="A+">A+</ToggleGroupItem>
+                                <ToggleGroupItem className="text-slate-400 text-sm font-poppins font-semibold bg-white/5 border border-white/10 rounded-xl cursor-pointer transition-all delay-75 hover:text-white hover:bg-blue-300" value="A-">A-</ToggleGroupItem>
+                                <ToggleGroupItem className="text-slate-400 text-sm font-poppins font-semibold bg-white/5 border border-white/10 rounded-xl cursor-pointer transition-all delay-75 hover:text-white hover:bg-blue-300" value="B+">B+</ToggleGroupItem>
+                                <ToggleGroupItem className="text-slate-400 text-sm font-poppins font-semibold bg-white/5 border border-white/10 rounded-xl cursor-pointer transition-all delay-75 hover:text-white hover:bg-blue-300" value="B-">B-</ToggleGroupItem>
+                                <ToggleGroupItem className="text-slate-400 text-sm font-poppins font-semibold bg-white/5 border border-white/10 rounded-xl cursor-pointer transition-all delay-75 hover:text-white hover:bg-blue-300" value="AB+">AB+</ToggleGroupItem>
+                                <ToggleGroupItem className="text-slate-400 text-sm font-poppins font-semibold bg-white/5 border border-white/10 rounded-xl cursor-pointer transition-all delay-75 hover:text-white hover:bg-blue-300" value="AB-">AB-</ToggleGroupItem>
+                                <ToggleGroupItem className="text-slate-400 text-sm font-poppins font-semibold bg-white/5 border border-white/10 rounded-xl cursor-pointer transition-all delay-75 hover:text-white hover:bg-blue-300" value="0+">O+</ToggleGroupItem>
+                                <ToggleGroupItem className="text-slate-400 text-sm font-poppins font-semibold bg-white/5 border border-white/10 rounded-xl cursor-pointer transition-all delay-75 hover:text-white hover:bg-blue-300" value="0-">O-</ToggleGroupItem>
+                            </ToggleGroup>
+                        )}
+                    />
+                    {errors.bloodType?.message && <span className="text-red-500 text-sm font-inter">{errors.bloodType?.message}</span>}
                 </div>
             </div>
             <div className="flex justify-between items-center gap-2 w-full">
@@ -120,8 +182,9 @@ export default function FormPatient() {
                 ><ArrowLeft size={15} /> Voltar</button>
                 <button 
                     className="flex justify-center items-center w-full text-white text-base font-poppins font-semibold bg-linear-to-r from-blue-400 to-cyan-400 shadow-lg shadow-blue-500/30 rounded-xl p-3 cursor-pointer transition-all delay-75 hover:shadow-blue-500/50"
+                    type="submit"
                 >Completar Registro</button>
             </div>
-        </div>
+        </form>
     );
 }

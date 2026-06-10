@@ -4,20 +4,20 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { User } from "@/app/schemas/login.schema";
+import { LoginSchema } from "@/app/schemas/login.schema";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import { Eye, EyeOff } from "lucide-react";
 import { FaGoogle } from "react-icons/fa";
 import Link from "next/link";
 
-type Inputs = z.infer<typeof User>;
+type Inputs = z.infer<typeof LoginSchema>;
 type Role = "PATIENT" | "DOCTOR";
 
 export default function LoginForm() {
     const [role, setRole] = useState<Role>("PATIENT");
     const [passwordVisibility, setPasswordVisibility] = useState<boolean>(false);
-    const { register, handleSubmit, watch, formState: { errors } } = useForm<Inputs>({ resolver: zodResolver(User) });
+    const { register, handleSubmit, watch, formState: { errors } } = useForm<Inputs>({ resolver: zodResolver(LoginSchema) });
     const router = useRouter();
 
     const changePasswordVisibility = () => setPasswordVisibility(!passwordVisibility);
