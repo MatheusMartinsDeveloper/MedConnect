@@ -54,7 +54,7 @@ export default function DoctorsCard({ doctorProfilePicture, doctorName, doctorSp
                 <div className="flex justify-end w-full">
                     <Link
                         className="button flex justify-center items-center gap-1.5 w-1/2 text-white text-sm font-poppins font-bold bg-linear-to-r from-blue-500 to-cyan-500 rounded-xl shadow-md shadow-blue-500/30 px-4 py-2 transition-all delay-75 hover:shadow-blue-500/50"
-                        href={""}
+                        href={"/user/patient/doctors/doctor"}
                     >Agendar Horário <ArrowRight size={15} /></Link>
                 </div>
             </div>

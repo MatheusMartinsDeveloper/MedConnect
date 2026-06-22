@@ -11,6 +11,8 @@ import { RegisterPatientSchema } from "@/app/schemas/register-patient.schema";
 import z from "zod";
 import { useRegisterStore } from "@/app/store/register-store";
 import { PatternFormat } from "react-number-format";
+import { toast } from "sonner";
+import { Toaster } from "@/components/ui/sonner";
 
 type Inputs = z.infer<typeof RegisterPatientSchema>
 
@@ -19,9 +21,14 @@ export default function FormPatient() {
     const [profilePicture, setProfilePicture] = useState<File | null>(null);
     const router = useRouter();
     const { handleSubmit, watch, control, formState: { errors } } = useForm({ resolver: zodResolver(RegisterPatientSchema) });
+    let loading = true;
 
     const onSubmit: SubmitHandler<Inputs> = async (data) => {
         try {
+            while (loading) {
+                toast.loading("Carregando...", { position: "top-center", id: "loading", toasterId: "loading" });
+            }
+
             const storeData = useRegisterStore.getState();
 
             const requestData = {
@@ -47,6 +54,11 @@ export default function FormPatient() {
                 body: formData
             });
 
+            if (response.ok) {
+                loading = false;
+                toast.success("Sua conta foi criada com sucesso!", { description: "Redirecionando...", position: "top-center", duration: 5000, id: "finished", toasterId: "finished" });
+            }
+            
             console.log("Response:", response);
             console.log(response.status);
             console.log(await response.text);
@@ -185,6 +197,8 @@ export default function FormPatient() {
                     type="submit"
                 >Completar Registro</button>
             </div>
+            <Toaster toastOptions={{ classNames: { toast: "!bg-green-500 !rounded-2xl", title: "!text-white !font-poppins", description: "!text-white", icon: "!text-white" } }} id="finished" />
+            <Toaster toastOptions={{ classNames: { toast: "!bg-slate-900 !rounded-2xl", title: "!text-white !font-poppins", icon: "!text-white" } }} id="loading" />
         </form>
     );
 }
