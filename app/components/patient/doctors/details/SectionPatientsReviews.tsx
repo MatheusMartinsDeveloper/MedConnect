@@ -4,7 +4,7 @@ import { ArrowRight } from "lucide-react";
 
 export default function SectionPatientsReviews() {
     return (
-        <section className="flex flex-col justify-center gap-5 w-2/3">
+        <section className="flex flex-col justify-center gap-5 w-2/3 pb-10">
             <div className="flex justify-between items-center w-full">
                 <h2 className="text-slate-100 text-base font-poppins font-bold">Feedback dos Pacientes</h2>
                 <Link

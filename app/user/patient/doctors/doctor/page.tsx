@@ -4,7 +4,7 @@ import SectionPatientsReviews from "@/app/components/patient/doctors/details/Sec
 
 export default function Doctor() {
     return (
-        <main className="flex flex-col justify-center items-center gap-10 w-full pt-10">
+        <main className="flex flex-col justify-center items-center gap-10 w-full pt-28">
             <CardDoctorInfo />
             <SectionDescriptionOffice />
             <SectionPatientsReviews />
