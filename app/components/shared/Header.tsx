@@ -8,7 +8,7 @@ export default function Header() {
     const pathname = usePathname();
 
     return (
-        <header className="flex justify-center bg-slate-900 border-b border-white/5 p-5">
+        <header className="fixed top-0 left-0 flex justify-center w-full z-50 bg-slate-900 border-b border-white/5 p-5">
             <div className="flex justify-between items-center w-2/3">
                 <div className="flex items-center gap-2">
                     <div className="relative flex justify-center items-center w-9 h-9 bg-linear-to-br from-blue-400 to-cyan-400 rounded-md">
