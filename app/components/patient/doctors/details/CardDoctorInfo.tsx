@@ -22,7 +22,7 @@ export default function CardDoctorInfo() {
                 <div>
                     <Link
                         className="flex justify-center items-center w-full bg-blue-400 rounded-xl p-2 text-white text-base font-poppins font-semibold"
-                        href={""}
+                        href={"/user/patient/doctors/doctor/schedule"}
                     >Agendar Consulta <ArrowRight size={20} /></Link>
                 </div>
             </div>
