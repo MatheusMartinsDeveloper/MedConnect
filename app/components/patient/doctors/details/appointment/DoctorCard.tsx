@@ -3,7 +3,7 @@ import Image from "next/image";
 
 export default function DoctorCard() {
     return (
-        <div className="flex gap-2 w-1/2 bg-white/5 border border-white/10 rounded-2xl p-5">
+        <div className="flex gap-2 w-full bg-white/5 border border-white/10 rounded-2xl p-5">
             <div className="relative w-14 h-auto">
                 <Image
                     className="object-cover rounded-2xl"

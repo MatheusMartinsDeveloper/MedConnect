@@ -23,7 +23,7 @@ export default function Header() {
                 </div>
                 <nav className="flex items-center gap-2">
                     <Link className={`text-sm font-poppins font-semibold rounded-md px-3 py-2 transition-all delay-75 ${pathname == "/user/patient" ? "text-blue-400 bg-blue-500/20" : "text-slate-400 hover:text-white hover:bg-white/5"}`} href={"/user/patient"}>Dashboard</Link>
-                    <Link className={`text-sm font-poppins font-semibold rounded-md px-3 py-2 transition-all delay-75 ${pathname == "/user/patient/doctors" ? "text-blue-400 bg-blue-500/20" : "text-slate-400 hover:text-white hover:bg-white/5"}`} href={"/user/patient/doctors"}>Médicos</Link>
+                    <Link className={`text-sm font-poppins font-semibold rounded-md px-3 py-2 transition-all delay-75 ${pathname == "/user/patient/doctors" || "/user/patient/doctors/doctor" ? "text-blue-400 bg-blue-500/20" : "text-slate-400 hover:text-white hover:bg-white/5"}`} href={"/user/patient/doctors"}>Médicos</Link>
                     <Link className={`text-sm font-poppins font-semibold rounded-md px-3 py-2 transition-all delay-75 ${pathname == "/user/patient/appointments" ? "text-blue-400 bg-blue-500/20" : "text-slate-400 hover:text-white hover:bg-white/5"}`} href={"/user/patient/appointments"}>Consultas</Link>
                     <Link className={`text-sm font-poppins font-semibold rounded-md px-3 py-2 transition-all delay-75 ${pathname == "/user/patient/report" ? "text-blue-400 bg-blue-500/20" : "text-slate-400 hover:text-white hover:bg-white/5"}`} href={"/user/patient/report"}>Prontuário</Link>
                 </nav>
