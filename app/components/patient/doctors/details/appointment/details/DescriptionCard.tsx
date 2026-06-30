@@ -53,7 +53,7 @@ export default function DescriptionCard() {
                     ><ArrowLeft size={20} /> Voltar</button>
                     <Link 
                         className="flex justify-center w-1/2 bg-linear-to-r from-blue-400 to-cyan-400 rounded-md p-3 text-slate-100 text-base font-poppins font-bold" 
-                        href={"/user/patient/doctors/doctor/schedule/details"}
+                        href={"/user/patient/doctors/doctor/schedule/details/confirmation"}
                     >Continuar para Confirmação</Link>
                 </div>
             </div>
