@@ -1,18 +1,33 @@
-"use client";
 import { Separator } from "@/components/ui/separator";
-import { ArrowLeft, Calendar, Clock } from "lucide-react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { Calendar, Clock, Dot } from "lucide-react";
+import Image from "next/image";
 
 export default function ResumeCard() {
-    const router = useRouter();
-
     return (
         <div className="flex flex-col justify-between w-1/2 bg-white/5 border border-white/10 rounded-2xl">
             <div className="flex justify-start w-full bg-blue-400 rounded-tl-2xl rounded-tr-2xl p-5">
                 <h2 className="text-slate-100 text-2xl font-poppins font-bold">Resumo do <br /> Agendamento</h2>
             </div>
             <div className="flex flex-col gap-5 p-5">
+                <div className="flex gap-2 w-full bg-white/5 border border-white/10 rounded-2xl p-5">
+                    <div className="relative w-14 h-auto">
+                        <Image
+                            className="object-cover rounded-2xl"
+                            src={"/assets/doctor_profile_picture.png"}
+                            alt="Doctor Profile Picture"
+                            fill
+                        />
+                    </div>
+                    <div className="flex flex-col gap-1">
+                        <span className="text-slate-100 text-base font-poppins font-semibold">Dr. Alvaro Rodrigues</span>
+                        <div className="flex items-center">
+                            <span className="text-slate-400 text-sm font-inter font-semibold">Cardiologista</span>
+                            <Dot className="text-slate-400" />
+                            <span className="text-slate-400 text-sm font-inter font-semibold">CRM 12345-SP</span>
+                        </div>
+                    </div>
+                </div>
+                <Separator className="bg-slate-100 w-full h-1" orientation="horizontal" />
                 <div className="flex items-center gap-2">
                     <div className="bg-blue-400/20 rounded-md p-2">
                         <Calendar className="text-blue-400" size={20} />
@@ -43,16 +58,6 @@ export default function ResumeCard() {
                         <span className="text-blue-400 text-xl font-poppins font-bold">R$ 250,00</span>
                     </div>
                 </div>
-            </div>
-            <div className="space-y-3 p-5 w-full">
-                <Link 
-                    className="flex justify-center bg-linear-to-r from-blue-400 to-cyan-400 rounded-md p-3 text-slate-100 text-base font-poppins font-bold" 
-                    href={"/user/patient/doctors/doctor/schedule/details"}
-                >Continuar para Detalhes</Link>
-                <button 
-                    className="flex justify-center items-center gap-1 w-full border border-blue-400 rounded-md p-3 text-blue-400 text-base font-poppins font-bold" 
-                    onClick={() => router.back()} 
-                ><ArrowLeft size={20} /> Voltar</button>
             </div>
         </div>
     );

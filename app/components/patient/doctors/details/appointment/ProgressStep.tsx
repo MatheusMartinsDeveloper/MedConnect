@@ -10,21 +10,23 @@ export default function ProgressStep() {
     let route3 = false;
 
     if (pathname === "/user/patient/doctors/doctor/schedule") route1 = true;
+    if (pathname === "/user/patient/doctors/doctor/schedule/details") route2 = true;
+    if (pathname === "/user/patient/doctors/doctor/schedule") route3 = true;
 
     return (
         <div className="flex items-center gap-3 w-full">
             <div className="flex flex-col items-center gap-2 flex-1">
                 <div className={`flex justify-center items-center w-14 h-14 bg-blue-400 rounded-2xl`}>
-                    <span className={`text-slate-100 text-lg font-poppins font-bold`}>1</span>
+                    <span className={`text-slate-100 text-lg font-poppins font-bold`}>{route2 ? <Check /> : 1}</span>
                 </div>
                 <span className={`text-blue-400 text-sm font-inter font-bold text-nowrap`}>Data/Horário</span>
             </div>
             <Separator className="bg-slate-100 flex-5 h-1" orientation="horizontal" />
             <div className="flex flex-col items-center gap-2 flex-1">
-                <div className={route2 ? "bg-blue-400" : "flex justify-center items-center w-14 h-14 bg-slate-400 rounded-2xl"}>
-                    <span className={route2 ? "text-slate-100" : "text-slate-200 text-lg font-poppins font-bold"}>2</span>
+                <div className={`${route2 ? "bg-blue-400" : "bg-slate-400"} flex justify-center items-center w-14 h-14 rounded-2xl`}>
+                    <span className={`${route2 ? "text-slate-100" : "text-slate-200"} text-lg font-poppins font-bold`}>{route3 ? <Check /> : 2}</span>
                 </div>
-                <span className={route2 ? "text-blue-400" : "text-slate-400 text-sm font-inter font-bold text-nowrap"}>Detalhes</span>
+                <span className={`${route2 ? "text-blue-400" : "text-slate-400"} text-sm font-inter font-bold text-nowrap`}>Detalhes</span>
             </div>
             <Separator className="bg-slate-100 flex-5 h-1" orientation="horizontal" />
             <div className="flex flex-col items-center gap-2 flex-1">

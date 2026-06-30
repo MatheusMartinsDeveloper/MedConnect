@@ -1,4 +1,4 @@
-import ProgressStep from "./ProgressStep";
+import ProgressStep from "../patient/doctors/details/appointment/ProgressStep";
 
 export default function TitleSection() {
     return (

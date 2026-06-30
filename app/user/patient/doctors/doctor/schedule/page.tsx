@@ -1,4 +1,4 @@
-import TitleSection from "@/app/components/patient/doctors/details/appointment/TitleSection";
+import TitleSection from "@/app/components/shared/TitleSection";
 import DoctorDateSection from "@/app/components/patient/doctors/details/appointment/DoctorDateSection";
 import ResumeCard from "@/app/components/patient/doctors/details/appointment/ResumeCard";
 
