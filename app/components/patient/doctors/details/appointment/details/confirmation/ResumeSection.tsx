@@ -20,13 +20,13 @@ export default function ResumeSection() {
             </div>
             <div className="flex justify-between items-center w-full">
                 <button 
-                    className="flex justify-center items-center gap-1 w-1/5 border border-blue-400 rounded-md p-3 text-blue-400 text-base font-poppins font-bold"
+                    className="flex justify-center items-center gap-1 w-1/5 border border-blue-400 rounded-md p-3 text-blue-400 text-base font-poppins font-bold cursor-pointer transition-all delay-75 hover:text-slate-100 hover:bg-blue-400"
                     onClick={() => router.back()}
                 ><ArrowLeft size={20} /> Voltar</button>
                 <AlertDialog>
                     <AlertDialogTrigger asChild>
                         <button 
-                            className="flex justify-center w-1/3 bg-linear-to-r from-blue-400 to-cyan-400 rounded-md p-3 text-slate-100 text-base font-poppins font-bold"
+                            className="flex justify-center w-1/3 bg-linear-to-r from-blue-400 to-cyan-400 shadow-sm rounded-md p-3 text-slate-100 text-base font-poppins font-bold cursor-pointer transition-all delay-75 hover:shadow-blue-400"
                         >Confirmar Agendamento</button>
                     </AlertDialogTrigger>
                     <AlertDialogContent className="bg-white/5 border border-white/10 ring-0">
